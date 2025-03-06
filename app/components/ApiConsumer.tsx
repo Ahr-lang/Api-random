@@ -1,31 +1,25 @@
-'use client';
 import { useApi } from '../hooks/useApi';
 import { Button } from './button';
+import { User } from '../types/User';
 
 export const ApiConsumer = () => {
-  const { data, loading, error, fetchData } = useApi<any>(
+  const { data, loading, error, fetchData } = useApi<{ results: User[] }>(
     'https://randomuser.me/api'
   );
-
-  const user = data?.results?.[0];
 
   return (
     <div>
       <Button onClick={fetchData}>
         {loading ? 'Loading...' : 'Fetch Random User'}
       </Button>
-
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-
-      {user && (
-        <div style={{ marginTop: '1rem' }}>
-          <h3>{`${user.name.title} ${user.name.first} ${user.name.last}`}</h3>
-          <p>Email: {user.email}</p>
-          <img
-            src={user.picture.thumbnail}
-            alt="Random user thumbnail"
-            style={{ borderRadius: '50%' }}
-          />
+      
+      {error && <p>Error: {error}</p>}
+      
+      {data?.results && (
+        <div>
+          <h2>{data.results[0].name.title} {data.results[0].name.first} {data.results[0].name.last}</h2>
+          <p>Email: {data.results[0].email}</p>
+          <img src={data.results[0].picture.large} alt="User" />
         </div>
       )}
     </div>
