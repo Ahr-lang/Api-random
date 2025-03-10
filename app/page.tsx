@@ -8,8 +8,19 @@ import { Button } from './components/button';
 import { Square } from './components/square';
 import { User } from './types/User';
 
+// Define the ApiResponse type
+interface ApiResponse {
+  results: User[];
+  info: {
+    seed: string;
+    results: number;
+    page: number;
+    version: string;
+  };
+}
+
 export default function Page() {
-  const { data, loading, error, fetchData } = useApi<any>('https://randomuser.me/api');
+  const { data, loading, error, fetchData } = useApi<ApiResponse>('https://randomuser.me/api');
   const newUser = data?.results?.[0] ?? null;
 
   const [savedUsers, setSavedUsers] = useState<User[]>([]);
